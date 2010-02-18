@@ -1,0 +1,42 @@
+Todoroo Android Commons
+-----------------------
+
+Branches of this project act as git submodules you can clone and use
+in your own project. Please see the attached LICENSE document for
+licensing terms.
+
+Each branch expects to be cloned within an Android project under the
+following path:
+
+    src/com/todoroo/commons/<branch_name>
+
+For example, the data branch contains the data layer submodule. All
+Java files within this project are under the package
+com.todoroo.commons.data, meaning the base folder for the submodule
+should be src/com/todoroo/commons/data. The specific git commands to
+achieve this are (obviously replace "data" with the module you want):
+
+    mkdir -p src/com/todoroo/commons/data
+    git submodule add -b data \
+        git://github.com/tim-todoroo/todoroo-android-commons.git \
+        src/com/todoroo/commons/data
+    git commit
+
+
+List of Submodules:
+
+    data    - code for accessing Android SQLite databases in a more
+              typesafe way. Contains abstract classes for Dao, Database,
+              and Model objects.
+
+    service - code for managing services and singletons, including
+              dependency injection, exceptions, apache http, and
+              Android services.
+
+    utility - utility classes for working with dates, dialogs,
+    	      threads, and the like.
+
+    widget  - Android graphical interfaces
+
+
+
