@@ -16,7 +16,6 @@ com.todoroo.commons.data, meaning the base folder for the submodule
 should be src/com/todoroo/commons/data. The specific git commands to
 achieve this are (obviously replace "data" with the module you want):
 
-    mkdir -p src/com/todoroo/androidcommons/data
     git submodule add -b data \
         git://github.com/tim-todoroo/todoroo-android-commons.git \
         src/com/todoroo/androidcommons/data
