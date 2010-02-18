@@ -8,8 +8,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 
-import com.todoroo.androidcommons.utility.DialogUtilities;
-
 /**
  * Exception handling utility class - reports and logs errors
  *
@@ -20,9 +18,6 @@ public class ExceptionService {
 
     @Autowired
     public ErrorReporter[] errorReporters;
-
-    @Autowired
-    public DialogUtilities dialogUtilities;
 
     @Autowired
     public Integer errorDialogTitleResource;
@@ -78,9 +73,8 @@ public class ExceptionService {
                     }
                 }
             });
-            dialogUtilities.okDialog((Activity)context, context.getResources().getString(
-                errorDialogTitleResource, messageToDisplay), null);
         }
+
         reportError(name, error);
     }
 
