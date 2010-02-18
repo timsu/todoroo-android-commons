@@ -34,10 +34,10 @@ public abstract class Property<TYPE> implements Cloneable {
     // --- other goodness
 
     /** The database table name this property */
-    public Table table;
+    public final Table table;
 
     /** The database column name for this property */
-    public String name;
+    public final String name;
 
     /**
      * Create a property by table and column name
@@ -74,20 +74,6 @@ public abstract class Property<TYPE> implements Cloneable {
      */
     public String asSqlSelector() {
         return qualifiedName() + " AS " + name; //$NON-NLS-1$
-    }
-
-    /**
-     * Clone this property with new parameters for name and table
-     */
-    public Property<TYPE> withNewValues(Table newtable, String newName) {
-        try {
-            Property<TYPE> clone = (Property<TYPE>) super.clone();
-            clone.table = newtable;
-            clone.name = newName;
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     /**

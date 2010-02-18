@@ -9,13 +9,11 @@ package com.todoroo.androidcommons.data;
 public class Table {
     private final String name;
     private final Class<? extends AbstractModel> modelClass;
-    private final Property<?>[] properties;
+    private Property<?>[] properties;
 
-    public Table(String name, Class<? extends AbstractModel> modelClass,
-            Property<?>[] properties) {
+    public Table(String name, Class<? extends AbstractModel> modelClass) {
         this.name = name;
         this.modelClass = modelClass;
-        this.properties = properties;
     }
 
     public String getName() {
@@ -24,6 +22,10 @@ public class Table {
 
     public Property<?>[] getProperties() {
         return properties;
+    }
+
+    public void setProperties(Property<?>[] properties) {
+        this.properties = properties;
     }
 
     public Class<? extends AbstractModel> getModelClass() {
