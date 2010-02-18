@@ -29,7 +29,7 @@ abstract public class AbstractDao<TYPE extends AbstractModel> {
     public AbstractDao(Class<TYPE> modelClass) {
         this.modelClass = modelClass;
     }
-    
+
     /**
      * Allows users to use SQLiteQueryBuilder to construct a query
      * @param database
@@ -43,8 +43,8 @@ abstract public class AbstractDao<TYPE extends AbstractModel> {
     public TodorooCursor<TYPE> query(AbstractDatabase database,
             Property<?>[] properties, SQLiteQueryBuilder builder,
             String where, String groupBy, String sortOrder) {
-        Cursor cursor = builder.query(database.getDatabase(), 
-                propertiesToFields(properties), where, null, groupBy, null, 
+        Cursor cursor = builder.query(database.getDatabase(),
+                propertiesToFields(properties), where, null, groupBy, null,
                 sortOrder);
         return new TodorooCursor<TYPE>(cursor);
     }
@@ -61,10 +61,10 @@ abstract public class AbstractDao<TYPE extends AbstractModel> {
      */
     public TodorooCursor<TYPE> fetch(AbstractDatabase database,
             Property<?>[] properties, String where) {
-        return fetchItems(database, database.getTableName(modelClass),
+        return fetchItems(database, database.getTable(modelClass),
                 properties, where, null, null, null, null);
     }
-    
+
     /**
      * Return cursor to all items matching criteria
      *
@@ -79,7 +79,7 @@ abstract public class AbstractDao<TYPE extends AbstractModel> {
      */
     public TodorooCursor<TYPE> fetch(AbstractDatabase database,
             Property<?>[] properties, String where, String orderby) {
-        return fetchItems(database, database.getTableName(modelClass),
+        return fetchItems(database, database.getTable(modelClass),
                 properties, where, null, null, orderby, null);
     }
 
@@ -99,7 +99,7 @@ abstract public class AbstractDao<TYPE extends AbstractModel> {
      */
     public TodorooCursor<TYPE> fetch(AbstractDatabase database,
             Property<?>[] properties, String where, String orderby, String limit) {
-        return fetchItems(database, database.getTableName(modelClass),
+        return fetchItems(database, database.getTable(modelClass),
                 properties, where, null, null, orderby, limit);
     }
 
@@ -122,9 +122,9 @@ abstract public class AbstractDao<TYPE extends AbstractModel> {
      * @return
      */
     public TodorooCursor<TYPE> fetch(AbstractDatabase database,
-            Property<?>[] properties, String where, String groupby, 
+            Property<?>[] properties, String where, String groupby,
             String having, String orderby, String limit) {
-        return fetchItems(database, database.getTableName(modelClass),
+        return fetchItems(database, database.getTable(modelClass),
                 properties, where, groupby, having, orderby, limit);
     }
 
@@ -143,7 +143,7 @@ abstract public class AbstractDao<TYPE extends AbstractModel> {
     public TYPE fetch(AbstractDatabase database, Property<?>[] properties,
             long id) {
         TodorooCursor<TYPE> cursor = fetchItem(database,
-                database.getTableName(modelClass), properties, id);
+                database.getTable(modelClass), properties, id);
         try {
             if (cursor.getCount() == 0)
                 return null;
@@ -177,7 +177,7 @@ abstract public class AbstractDao<TYPE extends AbstractModel> {
      * @return true if delete was successful
      */
     public boolean delete(AbstractDatabase database, long id) {
-        return deleteItem(database, database.getTableName(modelClass), id);
+        return deleteItem(database, database.getTable(modelClass), id);
     }
 
     /**
@@ -187,7 +187,7 @@ abstract public class AbstractDao<TYPE extends AbstractModel> {
      */
     public boolean save(AbstractDatabase database, AbstractModel item) {
         if (item.getId() == AbstractModel.NO_ID) {
-            return createItem(database, database.getTableName(modelClass),
+            return createItem(database, database.getTable(modelClass),
                     item);
         } else {
             ContentValues values = item.getSetValues();
@@ -195,7 +195,7 @@ abstract public class AbstractDao<TYPE extends AbstractModel> {
             if (values.size() == 0) // nothing changed
                 return true;
 
-            return saveItem(database, database.getTableName(modelClass),
+            return saveItem(database, database.getTable(modelClass),
                     item);
         }
     }
@@ -266,11 +266,11 @@ abstract public class AbstractDao<TYPE extends AbstractModel> {
      * @return
      */
     protected static <TYPE extends AbstractModel> TodorooCursor<TYPE> fetchItems(
-            AbstractDatabase database, String table, Property<?>[] properties, 
-            String where, String groupby, String having, String orderby, 
+            AbstractDatabase database, Table table, Property<?>[] properties,
+            String where, String groupby, String having, String orderby,
             String limit) {
         Cursor cursor = database.getDatabase().query(
-                table,
+                table.getName(),
                 propertiesToFields(properties), where, null, groupby, having,
                 orderby, limit);
         return new TodorooCursor<TYPE>(cursor);
@@ -289,9 +289,9 @@ abstract public class AbstractDao<TYPE extends AbstractModel> {
      * @return
      */
     protected static <TYPE extends AbstractModel> TodorooCursor<TYPE> fetchItem(
-            AbstractDatabase database, String table, Property<?>[] properties,
+            AbstractDatabase database, Table table, Property<?>[] properties,
             long id) {
-        Cursor cursor = database.getDatabase().query(true, table,
+        Cursor cursor = database.getDatabase().query(true, table.getName(),
                 propertiesToFields(properties),
                 AbstractModel.ID_PROPERTY + "=" + id, null, null, null, null, null); //$NON-NLS-1$
         cursor.moveToFirst();
@@ -306,9 +306,9 @@ abstract public class AbstractDao<TYPE extends AbstractModel> {
      *            id of item
      * @return true if delete was successful
      */
-    protected static boolean deleteItem(AbstractDatabase database, String table,
+    protected static boolean deleteItem(AbstractDatabase database, Table table,
             long id) {
-        return database.getDatabase().delete(table,
+        return database.getDatabase().delete(table.getName(),
                 AbstractModel.ID_PROPERTY + "=" + id, null) > 0; //$NON-NLS-1$
     }
 
@@ -322,9 +322,9 @@ abstract public class AbstractDao<TYPE extends AbstractModel> {
      *            item model
      * @return returns true on success.
      */
-    protected static boolean createItem(AbstractDatabase database, String table,
+    protected static boolean createItem(AbstractDatabase database, Table table,
             AbstractModel item) {
-        long newRow = database.getDatabase().insert(table,
+        long newRow = database.getDatabase().insert(table.getName(),
                 AbstractModel.ID_PROPERTY, item.getMergedValues());
         item.setId(newRow);
 
@@ -342,13 +342,13 @@ abstract public class AbstractDao<TYPE extends AbstractModel> {
      * @return returns true on success.
      */
     protected static boolean saveItem(AbstractDatabase database,
-            String table, AbstractModel item) {
+            Table table, AbstractModel item) {
         ContentValues values = item.getSetValues();
 
         if(values.size() == 0) // nothing changed
             return true;
 
-        return database.getDatabase().update(table, values,
+        return database.getDatabase().update(table.getName(), values,
                 AbstractModel.ID_PROPERTY + "=" + item.getId(), null) > 0; //$NON-NLS-1$
     }
 }

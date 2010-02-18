@@ -46,7 +46,7 @@ abstract public class AbstractDatabase {
      * @param modelType
      * @return
      */
-    public abstract String getTableName(Class<? extends AbstractModel> modelType);
+    public abstract Table getTable(Class<? extends AbstractModel> modelType);
 
 	// --- implementation
 

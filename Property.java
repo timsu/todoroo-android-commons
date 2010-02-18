@@ -34,7 +34,7 @@ public abstract class Property<TYPE> implements Cloneable {
     // --- other goodness
 
     /** The database table name this property */
-    public String tableName;
+    public Table table;
 
     /** The database column name for this property */
     public String name;
@@ -42,19 +42,11 @@ public abstract class Property<TYPE> implements Cloneable {
     /**
      * Create a property by table and column name
      */
-    protected Property(String tableName, String columnName) {
-        this.tableName = tableName;
+    protected Property(Table table, String columnName) {
+        this.table = table;
         this.name = columnName;
     }
 
-    /**
-     * Create a property by combined name
-     */
-    protected Property(String combinedName) {
-        int period = combinedName.indexOf('.');
-        this.tableName = combinedName.substring(0, period);
-        this.name = combinedName.substring(period + 1);
-    }
 
     /**
      * Accept a visitor
@@ -74,7 +66,7 @@ public abstract class Property<TYPE> implements Cloneable {
      * Return the qualified name of this property
      */
     public String qualifiedName() {
-        return tableName + '.' + name;
+        return table.getName() + '.' + name;
     }
 
     /**
@@ -85,12 +77,12 @@ public abstract class Property<TYPE> implements Cloneable {
     }
 
     /**
-     * Clone this property with new parameters for name and tableName
+     * Clone this property with new parameters for name and table
      */
-    public Property<TYPE> withNewValues(String newTableName, String newName) {
+    public Property<TYPE> withNewValues(Table newtable, String newName) {
         try {
             Property<TYPE> clone = (Property<TYPE>) super.clone();
-            clone.tableName = newTableName;
+            clone.table = newtable;
             clone.name = newName;
             return clone;
         } catch (CloneNotSupportedException e) {
@@ -122,12 +114,8 @@ public abstract class Property<TYPE> implements Cloneable {
      */
     public static class IntegerProperty extends Property<Integer> {
 
-        public IntegerProperty(String tableName, String name) {
-            super(tableName, name);
-        }
-
-        public IntegerProperty(String combinedName) {
-            super(combinedName);
+        public IntegerProperty(Table table, String name) {
+            super(table, name);
         }
 
         @Override
@@ -145,12 +133,8 @@ public abstract class Property<TYPE> implements Cloneable {
      */
     public static class StringProperty extends Property<String> {
 
-        public StringProperty(String tableName, String name) {
-            super(tableName, name);
-        }
-
-        public StringProperty(String combinedName) {
-            super(combinedName);
+        public StringProperty(Table table, String name) {
+            super(table, name);
         }
 
         @Override
@@ -168,14 +152,10 @@ public abstract class Property<TYPE> implements Cloneable {
      */
     public static class DoubleProperty extends Property<Double> {
 
-        public DoubleProperty(String tableName, String name) {
-            super(tableName, name);
+        public DoubleProperty(Table table, String name) {
+            super(table, name);
         }
 
-        public DoubleProperty(String combinedName) {
-            super(combinedName);
-
-        }
 
         @Override
         public <RETURN, PARAMETER> RETURN accept(
@@ -192,12 +172,8 @@ public abstract class Property<TYPE> implements Cloneable {
      */
     public static class LongProperty extends Property<Long> {
 
-        public LongProperty(String tableName, String name) {
-            super(tableName, name);
-        }
-
-        public LongProperty(String combinedName) {
-            super(combinedName);
+        public LongProperty(Table table, String name) {
+            super(table, name);
         }
 
         @Override
