@@ -1,4 +1,4 @@
-package com.todoroo.android.common.utility;
+package com.todoroo.androidcommons.utility;
 
 /**
  * <p>Encodes and decodes to and from Base64 notation.</p>
