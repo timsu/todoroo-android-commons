@@ -17,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.todoroo.androidcommonscommons.widget;
+package com.todoroo.androidcommons.widget;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -33,8 +33,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.FrameLayout.LayoutParams;
 
-import com.todoroo.androidcommonscommons.service.Autowired;
-import com.todoroo.androidcommonscommons.service.DependencyInjectionService;
+import com.todoroo.androidcommons.service.Autowired;
+import com.todoroo.androidcommons.service.DependencyInjectionService;
 
 /** Dialog box with an arbitrary number of number pickers */
 public class NNumberPickerDialog extends AlertDialog implements OnClickListener {

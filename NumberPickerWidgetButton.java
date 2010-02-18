@@ -17,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.todoroo.androidcommonscommons.widget;
+package com.todoroo.androidcommons.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -25,8 +25,8 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.widget.ImageButton;
 
-import com.todoroo.androidcommonscommons.service.Autowired;
-import com.todoroo.androidcommonscommons.service.DependencyInjectionService;
+import com.todoroo.androidcommons.service.Autowired;
+import com.todoroo.androidcommons.service.DependencyInjectionService;
 
 /**
  * This class exists purely to cancel long click events.
