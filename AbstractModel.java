@@ -3,12 +3,12 @@
  * All Rights Reserved
  * http://www.todoroo.com
  */
-package com.todoroo.android.data;
+package com.todoroo.androidcommons.data;
 
 import android.content.ContentValues;
 
-import com.todoroo.android.data.Property.LongProperty;
-import com.todoroo.android.data.Property.PropertyVisitor;
+import com.todoroo.androidcommons.data.Property.LongProperty;
+import com.todoroo.androidcommons.data.Property.PropertyVisitor;
 
 /**
  * <code>AbstractModel</code> represents a row in a database.

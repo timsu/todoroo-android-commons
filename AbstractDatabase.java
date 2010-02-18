@@ -3,14 +3,14 @@
  * All Rights Reserved
  * http://www.todoroo.com
  */
-package com.todoroo.android.data;
+package com.todoroo.androidcommons.data;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.todoroo.android.data.Property.PropertyVisitor;
+import com.todoroo.androidcommons.data.Property.PropertyVisitor;
 
 /**
  * AbstractDatabase is a database abstraction which wraps a SQLite database.

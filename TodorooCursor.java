@@ -1,14 +1,14 @@
 /**
  * See the file "LICENSE" for the full license governing this code.
  */
-package com.todoroo.android.data;
+package com.todoroo.androidcommons.data;
 
 import java.util.WeakHashMap;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
-import com.todoroo.android.data.Property.PropertyVisitor;
+import com.todoroo.androidcommons.data.Property.PropertyVisitor;
 
 /**
  * AstridCursor wraps a cursor and allows users to query for individual

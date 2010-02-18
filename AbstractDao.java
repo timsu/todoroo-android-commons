@@ -3,7 +3,7 @@
  * All Rights Reserved
  * http://www.todoroo.com
  */
-package com.todoroo.android.data;
+package com.todoroo.androidcommons.data;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
