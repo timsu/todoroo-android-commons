@@ -3,9 +3,9 @@ package com.todoroo.androidcommons.service;
 import java.io.IOException;
 
 /**
- * RestClient invokes the HTML requests as desired
- * 
- * @author timsu
+ * RestClient stub invokes the HTML requests as desired
+ *
+ * @author Tim Su <tim@todoroo.com>
  *
  */
 public interface RestClient {

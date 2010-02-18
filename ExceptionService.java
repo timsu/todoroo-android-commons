@@ -4,10 +4,11 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.SocketTimeoutException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 
-import com.todoroo.android.utility.DialogUtilities;
+import com.todoroo.androidcommons.utility.DialogUtilities;
 
 /**
  * Exception handling utility class - reports and logs errors
@@ -31,10 +32,10 @@ public class ExceptionService {
     }
 
     /**
-     * Report the error via Log +Flurry
+     * Report the error via registered error handlers
      *
-     * @param name
-     * @param error
+     * @param name Internal error name. Not displayed to user
+     * @param error Exception encountered. Message will be displayed to user
      */
     public void reportError(String name, Throwable error) {
         if(errorReporters == null)
@@ -47,20 +48,36 @@ public class ExceptionService {
     /**
      * Display error dialog if context is activity and report error
      *
-     * @param name
-     * @param error
+     * @param context Application Context
+     * @param name Internal error name. Not displayed to user
+     * @param error Exception encountered. Message will be displayed to user
      */
-    public void displayAndReportError(Context context, String name, Throwable error) {
+    public void displayAndReportError(final Context context, String name, Throwable error) {
         if(context instanceof Activity) {
-            String messageToDisplay = "(Unknown Error)"; //$NON-NLS-1$
-            if(error != null)
+            final String messageToDisplay;
+
+            // pretty up the message when displaying to user
+            if(error == null)
+                messageToDisplay = "(Unknown Error)"; //$NON-NLS-1$ // TODO
+            else if(error instanceof SocketTimeoutException)
+                messageToDisplay = "Couldn't connect to server."; //$NON-NLS-1$ // TODO
+            else
                 messageToDisplay = error.getMessage();
 
-            // pretty up the message
-            if(error instanceof SocketTimeoutException) {
-                messageToDisplay = "Couldn't connect to Todoroo's servers."; //$NON-NLS-1$
-            }
-
+            ((Activity)context).runOnUiThread(new Runnable() {
+                public void run() {
+                    try {
+                        new AlertDialog.Builder(context)
+                        .setTitle(context.getString(errorDialogTitleResource))
+                        .setMessage(messageToDisplay)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.ok, null)
+                        .show();
+                    } catch (Exception e) {
+                        // suppress errors during dialog creation
+                    }
+                }
+            });
             dialogUtilities.okDialog((Activity)context, context.getResources().getString(
                 errorDialogTitleResource, messageToDisplay), null);
         }

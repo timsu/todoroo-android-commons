@@ -26,7 +26,7 @@ import android.util.Log;
  * http://senior.ceng.metu.edu.tr/2009/praeda/2009/01/11/a-simple
  * -restful-client-at-android/
  *
- * @author timsu
+ * @author Tim Su <tim@todoroo.com>
  *
  */
 public class HttpRestClient implements RestClient {

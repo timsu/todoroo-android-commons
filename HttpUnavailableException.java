@@ -2,6 +2,12 @@ package com.todoroo.androidcommons.service;
 
 import java.io.IOException;
 
+/**
+ * Exception displayed when a 500 error is received on an HTTP invocation
+ *
+ * @author Tim Su <tim@todoroo.com>
+ *
+ */
 public class HttpUnavailableException extends IOException {
 
     private static final long serialVersionUID = 5373340422464657279L;

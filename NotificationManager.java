@@ -7,7 +7,7 @@ import android.app.Notification;
 import android.content.Context;
 
 /**
- * Interface for mocking out notification manager
+ * Notification Manager stub
  *
  * @author timsu
  *
