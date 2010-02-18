@@ -65,6 +65,31 @@ public class DialogUtilities {
     }
 
     /**
+     * Displays a dialog box with OK and Cancel buttons and custom title
+     *
+     * @param activity
+     * @param title
+     * @param text
+     * @param okListener
+     * @param cancelListener
+     */
+    public void okCancelDialog(final Activity activity, final String title,
+            final String text, final DialogInterface.OnClickListener okListener,
+            final DialogInterface.OnClickListener cancelListener) {
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                new AlertDialog.Builder(activity)
+                .setTitle(title)
+                .setMessage(text)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.ok, okListener)
+                .setNegativeButton(android.R.string.cancel, cancelListener)
+                .show();
+            }
+        });
+    }
+
+    /**
      * Displays a dialog box with OK and Cancel buttons
      *
      * @param activity
