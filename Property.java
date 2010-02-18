@@ -3,7 +3,7 @@
  * All Rights Reserved
  * http://www.todoroo.com
  */
-package com.todoroo.android.data;
+package com.todoroo.androidcommons.data;
 
 /**
  * Property represents a typed column in a database.

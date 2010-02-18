@@ -1,7 +1,7 @@
 /**
  * See the file "LICENSE" for the full license governing this code.
  */
-package com.todoroo.android.data;
+package com.todoroo.androidcommons.data;
 
 import java.util.Map.Entry;
 
