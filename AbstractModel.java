@@ -5,7 +5,11 @@
  */
 package com.todoroo.androidcommons.data;
 
+import java.lang.reflect.Array;
+
 import android.content.ContentValues;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.todoroo.androidcommons.data.Property.LongProperty;
 import com.todoroo.androidcommons.data.Property.PropertyVisitor;
@@ -20,7 +24,7 @@ import com.todoroo.androidcommons.data.Property.PropertyVisitor;
  * @author Tim Su <tim@todoroo.com>
  *
  */
-public abstract class AbstractModel {
+public abstract class AbstractModel implements Parcelable {
 
     // --- static variables
 
@@ -52,7 +56,7 @@ public abstract class AbstractModel {
     protected ContentValues setValues = null;
 
     /** Values from database */
-    private ContentValues values = null;
+    protected ContentValues values = null;
 
     /** Get database-read values for this object */
     public ContentValues getDatabaseValues() {
@@ -250,4 +254,67 @@ public abstract class AbstractModel {
             return null;
         }
     }
+
+    // --- parcelable helpers
+
+    /**
+     * {@inheritDoc}
+     */
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(setValues, 0);
+        dest.writeParcelable(values, 0);
+    }
+
+    /**
+     * In addition to overriding this class, model classes should create
+     * a static final variable named "CREATOR" in order to satisfy the
+     * requirements of the Parcelable interface.
+     */
+    abstract protected Parcelable.Creator<? extends AbstractModel> getCreator();
+
+   /**
+    * Parcelable creator helper
+    */
+    protected static final class ModelCreator<TYPE extends AbstractModel>
+            implements Parcelable.Creator<TYPE> {
+
+        private Class<TYPE> cls;
+
+        public ModelCreator(Class<TYPE> cls) {
+            super();
+            this.cls = cls;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public TYPE createFromParcel(Parcel source) {
+            TYPE model;
+            try {
+                model = cls.newInstance();
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (InstantiationException e) {
+                throw new RuntimeException(e);
+            }
+            model.setValues = source.readParcelable(ContentValues.class.getClassLoader());
+            model.values = source.readParcelable(ContentValues.class.getClassLoader());
+            return model;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public TYPE[] newArray(int size) {
+            return (TYPE[]) Array.newInstance(cls, size);
+        };
+    };
+
 }
