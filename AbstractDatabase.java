@@ -5,6 +5,7 @@
  */
 package com.todoroo.androidcommons.data;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -32,7 +33,12 @@ abstract public class AbstractDatabase {
 	// --- abstract methods
 
     /**
-     * Get SQLiteOpenHelper underlying this wrapper
+     * @return database name
+     */
+    protected abstract String getName();
+
+    /**
+     * @return SQLiteOpenHelper underlying this wrapper
      */
 	protected abstract SQLiteOpenHelper getHelper();
 
@@ -47,6 +53,11 @@ abstract public class AbstractDatabase {
      * @return
      */
     public abstract Table getTable(Class<? extends AbstractModel> modelType);
+
+    /**
+     * @return all tables in this database
+     */
+    public abstract Table[] getTables();
 
 	// --- implementation
 
@@ -86,6 +97,15 @@ abstract public class AbstractDatabase {
     public synchronized void close() {
         if(database != null)
             database.close();
+    }
+
+    /**
+     * Clear all data in database. Warning: this does what it says. Any open
+     * database resources will be abruptly closed.
+     */
+    public void clear(Context context) {
+        close();
+        context.deleteDatabase(getName());
     }
 
     /**
