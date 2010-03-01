@@ -74,6 +74,11 @@ public class DependencyInjectionService {
             throws IllegalStateException, IllegalArgumentException,
             IllegalAccessException {
 
+        if(field.getType().isPrimitive())
+            throw new IllegalStateException(String.format(
+                    "Tried to dependency-inject primative field '%s' of type '%s'",
+                    field.getName(), field.getType()));
+
         // field has already been processed, ignore
         if (field.get(caller) != null) {
             return;
