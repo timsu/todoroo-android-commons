@@ -65,6 +65,27 @@ public class DialogUtilities {
     }
 
     /**
+     * Displays a dialog box with an OK button
+     *
+     * @param activity
+     * @param text
+     * @param okListener
+     */
+    public void okDialog(final Activity activity, final int icon, final String text,
+            final DialogInterface.OnClickListener okListener) {
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                new AlertDialog.Builder(activity)
+                .setTitle(informationDialogTitleResource)
+                .setMessage(text)
+                .setIcon(icon)
+                .setPositiveButton(android.R.string.ok, okListener)
+                .show();
+            }
+        });
+    }
+
+    /**
      * Displays a dialog box with OK and Cancel buttons and custom title
      *
      * @param activity

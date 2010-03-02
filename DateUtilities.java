@@ -54,21 +54,21 @@ public class DateUtilities {
      * ====================================================================== */
 
     /** Convert unixtime into date */
-    public static Date unixtimeToDate(int seconds) {
+    public static final Date unixtimeToDate(int seconds) {
         if(seconds == 0)
             return null;
         return new Date(seconds * 1000L);
     }
 
     /** Convert date into unixtime */
-    public static int dateToUnixtime(Date date) {
+    public static final int dateToUnixtime(Date date) {
         if(date == null)
             return 0;
         return (int)(date.getTime() / 1000);
     }
 
     /** Returns unixtime for current time */
-    public static int now() {
+    public static final int now() {
         return (int) (System.currentTimeMillis() / 1000L);
     }
 
