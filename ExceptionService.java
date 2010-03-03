@@ -22,6 +22,15 @@ public class ExceptionService {
     @Autowired
     public Integer errorDialogTitleResource;
 
+    @Autowired
+    public Integer errorDialogBodyGeneric;
+
+    @Autowired
+    public Integer errorDialogBodyNullError;
+
+    @Autowired
+    public Integer errorDialogBodySocketTimeout;
+
     public ExceptionService() {
         DependencyInjectionService.getInstance().inject(this);
     }
@@ -53,17 +62,17 @@ public class ExceptionService {
 
             // pretty up the message when displaying to user
             if(error == null)
-                messageToDisplay = "(Unknown Error)"; //$NON-NLS-1$ // TODO
+                messageToDisplay = context.getString(errorDialogBodyNullError);
             else if(error instanceof SocketTimeoutException)
-                messageToDisplay = "Couldn't connect to server."; //$NON-NLS-1$ // TODO
+                messageToDisplay = context.getString(errorDialogBodySocketTimeout);
             else
-                messageToDisplay = error.getMessage();
+                messageToDisplay = context.getString(errorDialogBodyGeneric, error.getMessage());
 
             ((Activity)context).runOnUiThread(new Runnable() {
                 public void run() {
                     try {
                         new AlertDialog.Builder(context)
-                        .setTitle(context.getString(errorDialogTitleResource))
+                        .setTitle(errorDialogTitleResource)
                         .setMessage(messageToDisplay)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton(android.R.string.ok, null)
