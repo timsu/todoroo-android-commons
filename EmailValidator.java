@@ -9,9 +9,6 @@ import java.util.regex.Pattern;
 @SuppressWarnings("nls")
 public final class EmailValidator {
 
-    private static final boolean ALLOW_DOMAIN_LITERALS = false;
-    private static final boolean ALLOW_QUOTED_IDENTIFIERS = false;
-
     // RFC 2822 2.2.2 Structured Header Field Bodies
     private static final String wsp = "[ \\t]"; // space or tab
     private static final String fwsp = wsp + "*";
@@ -29,7 +26,6 @@ public final class EmailValidator {
 
     // RFC 2822 3.2.4 Atom:
     private static final String atext = "[a-zA-Z0-9\\!\\#\\$\\%\\&\\'\\*\\+\\-\\/\\=\\?\\^\\_\\`\\{\\|\\}\\~]";
-    private static final String atom = fwsp + atext + "+" + fwsp;
     private static final String dotAtomText = atext + "+" + "(" + "\\." + atext
             + "+)*";
     private static final String dotAtom = fwsp + "(" + dotAtomText + ")" + fwsp;
@@ -43,11 +39,6 @@ public final class EmailValidator {
     private static final String quotedString = dquote + "(" + fwsp + qcontent
             + ")*" + fwsp + dquote;
 
-    // RFC 2822 3.2.6 Miscellaneous tokens
-    private static final String word = "((" + atom + ")|(" + quotedString
-            + "))";
-    private static final String phrase = word + "+"; // one or more words.
-
     // RFC 1035 tokens for domain names:
     private static final String letter = "[a-zA-Z]";
     private static final String letDig = "[a-zA-Z0-9]";
@@ -57,32 +48,15 @@ public final class EmailValidator {
     private static final String rfc1035DomainName = rfcLabel + "(\\."
             + rfcLabel + ")*\\." + letter + "{2,6}";
 
-    // RFC 2822 3.4 Address specification
-    // domain text - non white space controls and the rest of ASCII chars not
-    // including [, ], or \:
-    private static final String dtext = "[" + noWsCtl
-            + "\\x21-\\x5A\\x5E-\\x7E]";
-    private static final String dcontent = dtext + "|" + quotedPair;
-    private static final String domainLiteral = "\\[" + "(" + fwsp + dcontent
-            + "+)*" + fwsp + "\\]";
-    private static final String rfc2822Domain = "(" + dotAtom + "|"
-            + domainLiteral + ")";
-
-    private static final String domain = ALLOW_DOMAIN_LITERALS ? rfc2822Domain
-            : rfc1035DomainName;
+    private static final String domain = rfc1035DomainName;
 
     private static final String localPart = "((" + dotAtom + ")|("
             + quotedString + "))";
     private static final String addrSpec = localPart + "@" + domain;
-    private static final String angleAddr = "<" + addrSpec + ">";
-    private static final String nameAddr = "(" + phrase + ")?" + fwsp
-            + angleAddr;
-    private static final String mailbox = nameAddr + "|" + addrSpec;
 
     // now compile a pattern for efficient re-use:
     // if we're allowing quoted identifiers or not:
-    private static final String patternString = ALLOW_QUOTED_IDENTIFIERS ? mailbox
-            : addrSpec;
+    private static final String patternString = addrSpec;
     public static final Pattern VALID_PATTERN = Pattern.compile(patternString);
 
 
