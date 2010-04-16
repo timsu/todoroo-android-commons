@@ -11,13 +11,13 @@ import android.content.Context;
  * @author Tim Su <tim@todoroo.com>
  *
  */
-public class ContextManager {
+public final class ContextManager {
 
     /**
      * Global application context
      */
     private static Context context = null;
-    
+
     /**
      * Sets the global context
      * @param context
@@ -31,5 +31,16 @@ public class ContextManager {
      */
     public static Context getContext() {
         return context;
+    }
+
+    /**
+     * Convenience method to read a string from the resources
+     *
+     * @param resid
+     * @param parameters
+     * @return
+     */
+    public static String getString(int resId, Object... formatArgs) {
+        return context.getString(resId, formatArgs);
     }
 }
