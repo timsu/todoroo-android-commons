@@ -7,14 +7,20 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
 
+import com.todoroo.android.bente.R;
+import com.todoroo.android.bente.utilities.Notifications;
 import com.todoroo.androidcommons.service.Autowired;
 import com.todoroo.androidcommons.service.DependencyInjectionService;
 import com.todoroo.androidcommons.service.ExceptionService;
@@ -104,6 +110,20 @@ public class AndroidUtilities {
                     "start-external-intent-" + intent.toString(), //$NON-NLS-1$
                     e);
         }
+    }
 
+    /**
+     * Simple way to show a notification with the given message
+     * @param message
+     */
+    public static void showNotification(Context context,
+            int iconResource, String message) {
+        NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        String title = context.getResources().getString(R.string.app_name);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, new Intent(), 0);
+        Notification notification = Notifications.createNotification(context, pendingIntent,
+                    iconResource, title, message);
+        notification.ledARGB = Color.BLUE;
+        nm.notify(Notifications.ID_MESSAGES, notification);
     }
 }
