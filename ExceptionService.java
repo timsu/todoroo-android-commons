@@ -6,6 +6,8 @@ import java.net.SocketTimeoutException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
 /**
@@ -87,7 +89,6 @@ public class ExceptionService {
         reportError(name, error);
     }
 
-
     /**
      * Error reporter interface
      *
@@ -106,13 +107,6 @@ public class ExceptionService {
      */
     public static class AndroidLogReporter implements ErrorReporter {
 
-        @Autowired
-        public String applicationName;
-
-        public AndroidLogReporter() {
-            DependencyInjectionService.getInstance().inject(this);
-        }
-
         /**
          * Report the error to the logs
          *
@@ -120,10 +114,19 @@ public class ExceptionService {
          * @param error
          */
         public void handleError(String name, Throwable error) {
-            String tag;
-            if(applicationName != null)
-                tag = applicationName + "-" +  name; //$NON-NLS-1$
-            else
+            String tag = null;
+            if(ContextManager.getContext() != null) {
+                PackageManager pm = ContextManager.getContext().getPackageManager();
+                try {
+                    String appName = pm.getApplicationInfo(ContextManager.getContext().
+                            getPackageName(), 0).name;
+                    tag = appName + "-" +  name; //$NON-NLS-1$
+                } catch (NameNotFoundException e) {
+                    // give up
+                }
+            }
+
+            if(tag == null)
                 tag = "unknown-" + name; //$NON-NLS-1$
 
             if(error == null)

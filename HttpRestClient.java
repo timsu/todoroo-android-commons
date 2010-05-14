@@ -19,6 +19,8 @@ import org.apache.http.params.HttpParams;
 
 import android.util.Log;
 
+import com.todoroo.android.bente.service.ConfigurationService;
+
 /**
  * RestClient allows Android to consume web requests.
  * <p>
@@ -40,7 +42,7 @@ public class HttpRestClient implements RestClient {
     private static WeakReference<HttpClient> httpClient = null;
 
     @Autowired
-    private Boolean debug;
+    private ConfigurationService configurationService;
 
     public HttpRestClient() {
         DependencyInjectionService.getInstance().inject(this);
@@ -116,7 +118,7 @@ public class HttpRestClient implements RestClient {
     public synchronized String get(String url) throws IOException {
         initializeHttpClient();
 
-        if(debug)
+        if(configurationService.isDebug())
             Log.d("http-rest-client-get", url); //$NON-NLS-1$
 
         try {
@@ -144,7 +146,7 @@ public class HttpRestClient implements RestClient {
     public synchronized String post(String url, String data) throws IOException {
         initializeHttpClient();
 
-        if(debug)
+        if(configurationService.isDebug())
             Log.d("http-rest-client-post", url + " | " + data); //$NON-NLS-1$ //$NON-NLS-2$
 
         try {
