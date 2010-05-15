@@ -3,7 +3,12 @@
  * All Rights Reserved
  * http://www.todoroo.com
  */
-package com.todoroo.androidcommons.data;
+package com.todoroo.andlib.data;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import java.lang.reflect.Array;
 
@@ -11,8 +16,9 @@ import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.todoroo.androidcommons.data.Property.LongProperty;
-import com.todoroo.androidcommons.data.Property.PropertyVisitor;
+import com.todoroo.andlib.data.Property.IntegerProperty;
+import com.todoroo.andlib.data.Property.LongProperty;
+import com.todoroo.andlib.data.Property.PropertyVisitor;
 
 /**
  * <code>AbstractModel</code> represents a row in a database.
@@ -33,7 +39,10 @@ public abstract class AbstractModel implements Parcelable {
     // --- constants
 
     /** id property common to all models */
-    public static final String ID_PROPERTY = "_id"; //$NON-NLS-1$
+    protected static final String ID_PROPERTY_NAME = "_id"; //$NON-NLS-1$
+
+    /** id field common to all models */
+    public static final IntegerProperty ID_PROPERTY = new IntegerProperty(null, ID_PROPERTY_NAME);
 
     /** sentinel for objects without an id */
     public static final long NO_ID = 0;
@@ -163,9 +172,9 @@ public abstract class AbstractModel implements Parcelable {
             setValues = new ContentValues();
 
         if(id == NO_ID)
-            setValues.remove(ID_PROPERTY);
+            setValues.remove(ID_PROPERTY_NAME);
         else
-            setValues.put(ID_PROPERTY, id);
+            setValues.put(ID_PROPERTY_NAME, id);
     }
 
     // --- data storage
@@ -217,7 +226,34 @@ public abstract class AbstractModel implements Parcelable {
             setValues.remove(property.name);
     }
 
-    // --- property visitors
+    // --- property management
+
+    /**
+     * Looks inside the given class and finds all declared properties
+     */
+    protected static Property<?>[] generateProperties(Class<? extends AbstractModel> cls) {
+        ArrayList<Property<?>> properties = new ArrayList<Property<?>>();
+        if(cls.getSuperclass() != AbstractModel.class)
+            properties.addAll(Arrays.asList(generateProperties(
+                (Class<? extends AbstractModel>) cls.getSuperclass())));
+
+        // a property is public, static & extends Property
+        for(Field field : cls.getFields()) {
+            if((field.getModifiers() & Modifier.STATIC) == 0)
+                continue;
+            if(!Property.class.isAssignableFrom(field.getType()))
+                continue;
+            try {
+                properties.add((Property<?>) field.get(null));
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return properties.toArray(new Property<?>[properties.size()]);
+    }
 
     /**
      * Visitor that saves a value into a content values store

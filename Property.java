@@ -3,7 +3,9 @@
  * All Rights Reserved
  * http://www.todoroo.com
  */
-package com.todoroo.androidcommons.data;
+package com.todoroo.andlib.data;
+
+import com.todoroo.andlib.data.sql.Field;
 
 /**
  * Property represents a typed column in a database.
@@ -17,21 +19,10 @@ package com.todoroo.androidcommons.data;
  * @param <TYPE>
  *            a database supported type, such as String or Integer
  */
-public abstract class Property<TYPE> implements Cloneable {
+@SuppressWarnings("nls")
+public abstract class Property<TYPE> extends Field implements Cloneable {
 
-    // --- pseudo-properties
-
-    /** counting in aggregated tables */
-    public static IntegerProperty countProperty() {
-        return new IntegerProperty(null, "count") { //$NON-NLS-1$
-            @Override
-            public String asSqlSelector() {
-                return "COUNT(1) AS " + name; //$NON-NLS-1$
-            };
-        };
-    }
-
-    // --- other goodness
+    // --- implementation
 
     /** The database table name this property */
     public final Table table;
@@ -40,13 +31,22 @@ public abstract class Property<TYPE> implements Cloneable {
     public final String name;
 
     /**
-     * Create a property by table and column name
+     * Create a property by table and column name. Uses the default property
+     * expression which is derived from default table name
      */
     protected Property(Table table, String columnName) {
+        this(table, columnName, (table == null) ? (columnName) : (table.name + "." + columnName));
+    }
+
+    /**
+     * Create a property by table and column name, manually specifying an
+     * expression to use in SQL
+     */
+    protected Property(Table table, String columnName, String expression) {
+        super(expression);
         this.table = table;
         this.name = columnName;
     }
-
 
     /**
      * Accept a visitor
@@ -55,26 +55,18 @@ public abstract class Property<TYPE> implements Cloneable {
             PropertyVisitor<RETURN, PARAMETER> visitor, PARAMETER data);
 
     /**
-     * Return the name of the property
+     * Return a clone of this property
      */
     @Override
-    public String toString() {
-        return name;
+    public Property<TYPE> clone() {
+        try {
+            return (Property<TYPE>) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    /**
-     * Return the qualified name of this property
-     */
-    public String qualifiedName() {
-        return table.getName() + '.' + name;
-    }
-
-    /**
-     * Return the qualified name of the property
-     */
-    public String asSqlSelector() {
-        return qualifiedName() + " AS " + name; //$NON-NLS-1$
-    }
+    // --- helper classes and interfaces
 
     /**
      * Visitor interface for property classes
@@ -92,6 +84,8 @@ public abstract class Property<TYPE> implements Cloneable {
         public RETURN visitString(Property<String> property, PARAMETER data);
     }
 
+    // --- children
+
     /**
      * Integer property type. See {@link Property}
      *
@@ -102,6 +96,10 @@ public abstract class Property<TYPE> implements Cloneable {
 
         public IntegerProperty(Table table, String name) {
             super(table, name);
+        }
+
+        protected IntegerProperty(Table table, String name, String expression) {
+            super(table, name, expression);
         }
 
         @Override
@@ -123,6 +121,10 @@ public abstract class Property<TYPE> implements Cloneable {
             super(table, name);
         }
 
+        protected StringProperty(Table table, String name, String expression) {
+            super(table, name, expression);
+        }
+
         @Override
         public <RETURN, PARAMETER> RETURN accept(
                 PropertyVisitor<RETURN, PARAMETER> visitor, PARAMETER data) {
@@ -140,6 +142,10 @@ public abstract class Property<TYPE> implements Cloneable {
 
         public DoubleProperty(Table table, String name) {
             super(table, name);
+        }
+
+        protected DoubleProperty(Table table, String name, String expression) {
+            super(table, name, expression);
         }
 
 
@@ -162,10 +168,37 @@ public abstract class Property<TYPE> implements Cloneable {
             super(table, name);
         }
 
+        protected LongProperty(Table table, String name, String expression) {
+            super(table, name, expression);
+        }
+
         @Override
         public <RETURN, PARAMETER> RETURN accept(
                 PropertyVisitor<RETURN, PARAMETER> visitor, PARAMETER data) {
             return visitor.visitLong(this, data);
+        }
+    }
+
+    // --- pseudo-properties
+
+    /** Runs a SQL function and returns the result as a string */
+    public static class StringFunctionProperty extends StringProperty {
+        public StringFunctionProperty(String function, String columnName) {
+            super(null, columnName, function + " AS " + columnName);
+        }
+    }
+
+    /** Runs a SQL function and returns the result as a string */
+    public static class IntegerFunctionProperty extends IntegerProperty {
+        public IntegerFunctionProperty(String function, String columnName) {
+            super(null, columnName, function + " AS " + columnName);
+        }
+    }
+
+    /** Counting in aggregated tables. Returns the result of COUNT(1) */
+    public static final class CountProperty extends IntegerFunctionProperty {
+        public CountProperty() {
+            super("COUNT(1)", "count");
         }
     }
 
