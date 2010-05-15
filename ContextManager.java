@@ -1,7 +1,7 @@
 /**
  * See the file "LICENSE" for the full license governing this code.
  */
-package com.todoroo.androidcommons.service;
+package com.todoroo.andlib.service;
 
 import android.content.Context;
 

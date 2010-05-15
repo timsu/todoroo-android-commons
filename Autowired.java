@@ -1,4 +1,4 @@
-package com.todoroo.androidcommons.service;
+package com.todoroo.andlib.service;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,4 +1,4 @@
-package com.todoroo.androidcommons.service;
+package com.todoroo.andlib.service;
 
 import java.lang.reflect.Field;
 
@@ -16,7 +16,7 @@ import java.lang.reflect.Field;
  */
 public class DependencyInjectionService {
 
-    private static final String QUALIFIED_PACKAGE = "com.todoroo"; //$NON-NLS-1$
+    private static final String QUALIFIED_PACKAGE = "com.t"; //$NON-NLS-1$
 
     /**
      * Dependency injectors. Use getters and setters to modify this list
@@ -29,6 +29,7 @@ public class DependencyInjectionService {
      * @param caller
      *            object to perform DI on
      */
+    @SuppressWarnings("nls")
     public void inject(Object caller) {
 
         // Traverse through class and all parent classes, looking for
@@ -47,11 +48,14 @@ public class DependencyInjectionService {
                     try {
                         handleField(caller, field);
                     } catch (IllegalStateException e) {
-                        throw new RuntimeException(e);
+                        throw new RuntimeException(String.format("Unable to set field '%s' of type '%s'",
+                                field.getName(), field.getType()), e);
                     } catch (IllegalArgumentException e) {
-                        throw new RuntimeException(e);
+                        throw new RuntimeException(String.format("Unable to set field '%s' of type '%s'",
+                                        field.getName(), field.getType()), e);
                     } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
+                        throw new RuntimeException(String.format("Unable to set field '%s' of type '%s'",
+                                field.getName(), field.getType()), e);
                     }
                 }
             }
