@@ -17,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.todoroo.androidcommons.widget;
+package com.todoroo.andlib.widget;
 
 import android.content.Context;
 import android.os.Handler;
@@ -36,8 +36,8 @@ import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.todoroo.androidcommons.service.Autowired;
-import com.todoroo.androidcommons.service.DependencyInjectionService;
+import com.todoroo.andlib.service.Autowired;
+import com.todoroo.andlib.service.DependencyInjectionService;
 
 public class NumberPickerWidget extends LinearLayout implements OnClickListener,
         OnFocusChangeListener, OnLongClickListener {
@@ -126,10 +126,6 @@ public class NumberPickerWidget extends LinearLayout implements OnClickListener,
     }
 
     public NumberPickerWidget(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public NumberPickerWidget(Context context, AttributeSet attrs, @SuppressWarnings("unused") int defStyle) {
         super(context, attrs);
         DependencyInjectionService.getInstance().inject(this);
 

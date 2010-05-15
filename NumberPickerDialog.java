@@ -17,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package com.todoroo.androidcommons.widget;
+package com.todoroo.andlib.widget;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -26,8 +26,8 @@ import android.content.DialogInterface.OnClickListener;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.todoroo.androidcommons.service.Autowired;
-import com.todoroo.androidcommons.service.DependencyInjectionService;
+import com.todoroo.andlib.service.Autowired;
+import com.todoroo.andlib.service.DependencyInjectionService;
 
 public class NumberPickerDialog extends AlertDialog implements OnClickListener {
 
