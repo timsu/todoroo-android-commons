@@ -1,4 +1,4 @@
-package com.todoroo.androidcommons.utility;
+package com.todoroo.andlib.utility;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,8 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.View;
 
-import com.todoroo.androidcommons.service.Autowired;
-import com.todoroo.androidcommons.service.DependencyInjectionService;
+import com.todoroo.andlib.service.Autowired;
+import com.todoroo.andlib.service.DependencyInjectionService;
 
 public class DialogUtilities {
 

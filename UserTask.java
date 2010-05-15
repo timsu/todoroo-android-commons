@@ -1,4 +1,4 @@
-package com.todoroo.androidcommons.utility;
+package com.todoroo.andlib.utility;
 
 /*
  * Copyright (C) 2008 Google Inc.
@@ -383,7 +383,7 @@ public abstract class UserTask<Params, Progress, Result> {
         begin();
 
         mWorker.mParams = params;
-        
+
         try {
             sExecutor.execute(mFuture);
         } catch (RejectedExecutionException e) {

@@ -3,14 +3,14 @@
  * All Rights Reserved
  * http://www.todoroo.com
  */
-package com.todoroo.androidcommons.utility;
+package com.todoroo.andlib.utility;
 
 import java.util.Date;
 
 import android.content.res.Resources;
 
-import com.todoroo.androidcommons.service.Autowired;
-import com.todoroo.androidcommons.service.DependencyInjectionService;
+import com.todoroo.andlib.service.Autowired;
+import com.todoroo.andlib.service.DependencyInjectionService;
 
 
 public class DateUtilities {

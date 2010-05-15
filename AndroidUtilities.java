@@ -1,4 +1,4 @@
-package com.todoroo.androidcommons.utility;
+package com.todoroo.andlib.utility;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -19,11 +19,17 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
 
+<<<<<<< Updated upstream:AndroidUtilities.java
 import com.todoroo.android.bente.R;
 import com.todoroo.android.bente.utilities.Notifications;
 import com.todoroo.androidcommons.service.Autowired;
 import com.todoroo.androidcommons.service.DependencyInjectionService;
 import com.todoroo.androidcommons.service.ExceptionService;
+=======
+import com.todoroo.andlib.service.Autowired;
+import com.todoroo.andlib.service.DependencyInjectionService;
+import com.todoroo.andlib.service.ExceptionService;
+>>>>>>> Stashed changes:AndroidUtilities.java
 
 /**
  * Android Utility Classes
@@ -110,6 +116,7 @@ public class AndroidUtilities {
                     "start-external-intent-" + intent.toString(), //$NON-NLS-1$
                     e);
         }
+<<<<<<< Updated upstream:AndroidUtilities.java
     }
 
     /**
@@ -125,5 +132,8 @@ public class AndroidUtilities {
                     iconResource, title, message);
         notification.ledARGB = Color.BLUE;
         nm.notify(Notifications.ID_MESSAGES, notification);
+=======
+>>>>>>> Stashed changes:AndroidUtilities.java
     }
+
 }

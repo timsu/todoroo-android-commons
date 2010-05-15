@@ -1,4 +1,4 @@
-package com.todoroo.androidcommons.utility;
+package com.todoroo.andlib.utility;
 
 import java.io.Serializable;
 import java.lang.ref.Reference;
