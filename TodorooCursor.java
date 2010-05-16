@@ -21,7 +21,11 @@ import com.todoroo.andlib.data.Property.PropertyVisitor;
  */
 public class TodorooCursor<TYPE extends AbstractModel> extends CursorWrapper {
 
-    /** Weakly cache field name to column id references for this cursor */
+    /** Properties read by this cursor */
+    private final Property<?>[] properties;
+
+    /** Weakly cache field name to column id references for this cursor.
+     * Because it's a weak hash map, entire keys can be discarded by GC */
     private final WeakHashMap<String, Integer> columnIndexCache;
 
     /** Property reading visitor */
@@ -32,10 +36,12 @@ public class TodorooCursor<TYPE extends AbstractModel> extends CursorWrapper {
      * object.
      *
      * @param cursor
+     * @param properties properties read from this cursor
      */
-    public TodorooCursor(Cursor cursor) {
+    public TodorooCursor(Cursor cursor, Property<?>[] properties) {
         super(cursor);
 
+        this.properties = properties;
         columnIndexCache = new WeakHashMap<String, Integer>();
     }
 
@@ -50,6 +56,13 @@ public class TodorooCursor<TYPE extends AbstractModel> extends CursorWrapper {
         return (PROPERTY_TYPE)property.accept(reader, this);
     }
 
+    /**
+     * Gets entire property list
+     * @return
+     */
+    public Property<?>[] getProperties() {
+        return properties;
+    }
 
     /**
      * Use cache to get the column index for the given field name

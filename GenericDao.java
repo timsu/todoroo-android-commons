@@ -63,7 +63,7 @@ public class GenericDao<TYPE extends AbstractModel> {
     public TodorooCursor<TYPE> query(Query query) {
         query.from(table);
         Cursor cursor = database.getDatabase().rawQuery(query.toString(), null);
-        return new TodorooCursor<TYPE>(cursor);
+        return new TodorooCursor<TYPE>(cursor, query.getFields());
     }
 
     /**
@@ -127,11 +127,12 @@ public class GenericDao<TYPE extends AbstractModel> {
     }
 
     /**
-     * Save the given object to the database.
+     * Save the given object to the database. Creates a new object if
+     * model id property has not been set
      *
      * @return true on success.
      */
-    public boolean save(AbstractModel item) {
+    public boolean persist(AbstractModel item) {
         if (item.getId() == AbstractModel.NO_ID) {
             return createItem(item);
         } else {
@@ -198,6 +199,6 @@ public class GenericDao<TYPE extends AbstractModel> {
         TodorooCursor<TYPE> cursor = query(
                 Query.select(properties).where(AbstractModel.ID_PROPERTY.eq(id)));
         cursor.moveToFirst();
-        return new TodorooCursor<TYPE>(cursor);
+        return new TodorooCursor<TYPE>(cursor, properties);
     }
 }

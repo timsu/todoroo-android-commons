@@ -16,21 +16,23 @@ import static java.util.Arrays.asList;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.todoroo.andlib.data.Property;
+
 public class Query {
 
     private Table table;
     private List<Criterion> criterions = new ArrayList<Criterion>();
-    private List<Field> fields = new ArrayList<Field>();
+    private List<Property<?>> fields = new ArrayList<Property<?>>();
     private List<Join> joins = new ArrayList<Join>();
     private List<Field> groupBies = new ArrayList<Field>();
     private List<Order> orders = new ArrayList<Order>();
     private List<Criterion> havings = new ArrayList<Criterion>();
 
-    private Query(Field... fields) {
+    private Query(Property<?>... fields) {
         this.fields.addAll(asList(fields));
     }
 
-    public static Query select(Field... fields) {
+    public static Query select(Property<?>... fields) {
         return new Query(fields);
     }
 
@@ -59,7 +61,7 @@ public class Query {
         return this;
     }
 
-    public Query appendSelectFields(Field... selectFields) {
+    public Query appendSelectFields(Property<?>... selectFields) {
         this.fields.addAll(asList(selectFields));
         return this;
     }
@@ -159,5 +161,13 @@ public class Query {
     public Query having(Criterion criterion) {
         this.havings.add(criterion);
         return this;
+    }
+
+    /**
+     * Gets a list of fields returned by this query
+     * @return
+     */
+    public Property<?>[] getFields() {
+        return fields.toArray(new Property<?>[fields.size()]);
     }
 }

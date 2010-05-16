@@ -5,12 +5,11 @@
  */
 package com.todoroo.andlib.data;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import java.lang.reflect.Array;
 
 import android.content.ContentValues;
 import android.os.Parcel;
@@ -122,15 +121,14 @@ public abstract class AbstractModel implements Parcelable {
     /**
      * Reads all properties from the supplied cursor and store
      */
-    protected synchronized void readPropertiesFromCursor(
-            TodorooCursor<?> cursor, Property<?>[] properties) {
+    protected synchronized void readPropertiesFromCursor(TodorooCursor<? extends AbstractModel> cursor) {
         if (values == null)
             values = new ContentValues();
 
         // clears user-set values
         setValues = null;
 
-        for (Property<?> property : properties) {
+        for (Property<?> property : cursor.getProperties()) {
             saver.save(property, values, cursor.get(property));
         }
     }
