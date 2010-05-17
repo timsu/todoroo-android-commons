@@ -6,8 +6,6 @@ import java.net.SocketTimeoutException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
 /**
@@ -105,7 +103,14 @@ public class ExceptionService {
      * @author Tim Su <tim@todoroo.com>
      *
      */
-    public static class AndroidLogReporter implements ErrorReporter {
+    public static final class AndroidLogReporter implements ErrorReporter {
+
+        @Autowired
+        public Integer appNameResource;
+
+        public AndroidLogReporter() {
+            DependencyInjectionService.getInstance().inject(this);
+        }
 
         /**
          * Report the error to the logs
@@ -113,24 +118,19 @@ public class ExceptionService {
          * @param name
          * @param error
          */
+        @SuppressWarnings("nls")
         public void handleError(String name, Throwable error) {
             String tag = null;
             if(ContextManager.getContext() != null) {
-                PackageManager pm = ContextManager.getContext().getPackageManager();
-                try {
-                    String appName = pm.getApplicationInfo(ContextManager.getContext().
-                            getPackageName(), 0).name;
-                    tag = appName + "-" +  name; //$NON-NLS-1$
-                } catch (NameNotFoundException e) {
-                    // give up
-                }
+                String appName = ContextManager.getString(appNameResource);
+                tag = appName + "-" +  name;
             }
 
             if(tag == null)
-                tag = "unknown-" + name; //$NON-NLS-1$
+                tag = "unknown-" + name;
 
             if(error == null)
-                Log.e(tag, "Exception: " + name); //$NON-NLS-1$
+                Log.e(tag, "Exception: " + name);
             else
                 Log.e(tag, error.toString(), error);
         }
@@ -154,9 +154,10 @@ public class ExceptionService {
             DependencyInjectionService.getInstance().inject(this);
         }
 
+        @SuppressWarnings("nls")
         public void uncaughtException(Thread thread, Throwable ex) {
             if(exceptionService != null)
-                exceptionService.reportError("uncaught", ex); //$NON-NLS-1$
+                exceptionService.reportError("uncaught", ex);
             defaultUEH.uncaughtException(thread, ex);
         }
     }
